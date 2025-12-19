@@ -4,8 +4,14 @@ const cors = require('cors');
 const { Server } = require('socket.io');
 
 const app = express();
+const ALLOWED_ORIGINS = [
+  "http://localhost:4200",
+  "https://trading-angular-git-main-jacinth91s-projects.vercel.app",
+  "https://trading-angular-gccn7ar02-jacinth91s-projects.vercel.app",
+  "https://trading-angular.vercel.app"
+];
 
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:4200';
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'https://trading-angular-git-main-jacinth91s-projects.vercel.app/';
 app.use(cors({ origin: CLIENT_ORIGIN }));
 const PORT = process.env.PORT || 3000;
 
@@ -52,8 +58,10 @@ setInterval(() => {
     // send only the delta update (best practice)
     io.emit("market:update", {
       symbol,
+      name: row.name,
       price: newPrice,
       changePercent: pct,
+      volume: row.volume
     });
   }
 }, 1000);
